@@ -16,6 +16,9 @@ public class Main {
         Matrix test = new Matrix(board, col, row);
         test.simulateGeneration();
         System.out.println(" ");
+        
+        MyFileWriter.writeFile("prefix", test);
+        
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++)
                 System.out.print(test.getBoardElement(i,j).getStatus() + " ");

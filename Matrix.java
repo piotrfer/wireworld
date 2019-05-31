@@ -9,6 +9,14 @@ public class Matrix {
         this.rowNum = rowNum;
     }
 
+    public int getColNum(){
+        return colNum;
+    }
+
+    public int getRowNum(){
+        return rowNum;
+    }
+
     public Cell getBoardElement(int i, int j) {
         return board[i][j];
     }
