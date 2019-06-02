@@ -26,7 +26,12 @@ public class Matrix {
         Cell[][] next = new Cell[rowNum][colNum];
         for (int i = 0; i < rowNum; i++){
             for (int j = 0; j <colNum; j++){
-                next[i][j]= new Cell(board[i][j].getStatus());}}
+                try{
+                    next[i][j]= new Cell(board[i][j].getStatus());
+                }
+                catch(Exception e){;}
+            }
+        }
 
         for (int i = 0; i < rowNum; i++) {
             for (int j = 0; j < colNum; j++) {

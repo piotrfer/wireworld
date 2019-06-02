@@ -3,7 +3,7 @@ import java.io.IOException;
 
 public class MyFileWriter{
 
-    public static int writeFile( String prefix, Matrix matrix){
+    public static void writeFile( String prefix, Matrix matrix){
 
         int num = 0;
 
@@ -25,13 +25,7 @@ public class MyFileWriter{
             }
             fw.close();
         } catch( IOException e ){
-            System.err.println("in/out err");
-            return 1;
+            System.err.println("file out err " + e.getLocalizedMessage());
         }
-
-        return 0;
-
-
-
     }
 }
