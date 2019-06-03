@@ -11,20 +11,20 @@ public class Controller {
     private GridPane grid;
     private MyGridPane myGrid = new MyGridPane();
 
-    public void onActionTest(ActionEvent actionEvent) {
-        //MyButton test = new MyButton(4,4,grid);
-    }
-
     @FXML
     protected void initialize() {
-        //myGrid.init(); //wywolanie metody init nie dziala gdy nowy obiekt MyGridPane zostanie stworzony w tej funkcji ( czemu?),
-        // gdy MyGridPane jest jako obiekt tej klasy kompilator czyta , że metoda init jesy wywolywana, ale wywala błąd
-        //MyButton m= new MyButton(4,4,grid); //w ten sposob dodaje przycisk bez wyrzucenia bledu
-        MyButton [][] button = new MyButton[MyGridPane.DEFAULT_ROW_NUM][MyGridPane.DEFAULT_COL_NUM];
+        //zrobic oddzielna funkcje w gridpane dodajaca te buttony
         for(int i=0; i< MyGridPane.DEFAULT_ROW_NUM; i++){
             for(int j=0;j<MyGridPane.DEFAULT_COL_NUM;j++){
-                button[i][j]=new MyButton(i, j, grid);
+                myGrid.addMyButton(new MyButton(i, j, grid));
             }
-    }}
+        }
+    }
+
+    public void onActionStart(ActionEvent actionEvent) {
+        Matrix m = myGrid.convertToMatrix();
+        m.simulateGeneration();
+        myGrid.convertFromMatrix(m);
+    }
 }
 
