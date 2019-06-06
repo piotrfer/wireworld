@@ -1,46 +1,24 @@
-import java.io.IOException;
+import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 
-public class Main {
+public class Main extends Application {
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+        primaryStage.setTitle("Wireworld");
+        primaryStage.setScene(new Scene(root, 1000, 600));
+        primaryStage.show();
+    }
+
 
     public static void main(String[] args) {
-        int row=5;
-        int col=6;
-        Cell[][] board = new Cell[row][col];
-        for (int i = 0; i < row; i++){
-            for (int j = 0; j <col; j++){
-                try{
-                board[i][j]= new Cell((int)(Math.random()*4));
-                }
-                catch(Exception e){
-                    System.err.println("Number must be in range <0,3>");
-                }
-            }
-        }
-            
-
-       for (int i = 0; i < row; i++) {
-            for (int j = 0; j < col; j++)
-                System.out.print(board[i][j].getStatus() + " ");
-            System.out.println(" ");}
-
-        Matrix test = new Matrix(board, col, row);
-        test.simulateGeneration();
-        System.out.println(" ");
-        
-        MyFileWriter.writeFile("prefix", test);
-        Matrix test2 = null;
-        try{
-            test2 = MyFileReader.readFile("dataprefix0.txt");
-        }
-        catch(IOException e){
-            System.err.println("Lol " + e.getLocalizedMessage());
-        }
-
-        for (int i = 0; i < row; i++) {
-            for (int j = 0; j < col; j++)
-                System.out.print(test2.getBoardElement(i,j).getStatus() + " ");
-            System.out.println(" ");
-        }
+        launch(args);
     }
 }
-

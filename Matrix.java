@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 public class Matrix {
     private Cell[][] board;
     private int colNum;
@@ -15,6 +16,22 @@ public class Matrix {
 
     public int getRowNum(){
         return rowNum;
+=======
+
+public class Matrix {
+    private Cell [][] board;
+    private int colNum;
+    private  int rowNum;
+
+    public Matrix(Cell[][] board, int colNum, int rowNum) {
+        this.board = board;
+        this.colNum= colNum;
+        this.rowNum = rowNum;
+    }
+
+    public Matrix() {
+
+>>>>>>> GUI
     }
 
     public Cell getBoardElement(int i, int j) {
@@ -36,7 +53,11 @@ public class Matrix {
         for (int i = 0; i < rowNum; i++) {
             for (int j = 0; j < colNum; j++) {
                 if( board[i][j].getStatus() == Cell.EMPTY)
+<<<<<<< HEAD
                         next[i][j].setStatus(Cell.EMPTY);
+=======
+                    next[i][j].setStatus(Cell.EMPTY);
+>>>>>>> GUI
 
                 else if( board[i][j].getStatus() == Cell.HEAD)
                     next[i][j].setStatus(Cell.TAIL);
@@ -44,6 +65,7 @@ public class Matrix {
                 else if( board[i][j].getStatus() == Cell.TAIL)
                     next[i][j].setStatus(Cell.COND);
 
+<<<<<<< HEAD
                  else if( board[i][j].getStatus() == Cell.COND){
                         headNeigh=0;
                         if (i - 1 >= 0)
@@ -80,6 +102,44 @@ public class Matrix {
 
                         if (headNeigh == 1 || headNeigh == 2 )
                             next[i][j].setStatus(Cell.HEAD);
+=======
+                else if( board[i][j].getStatus() == Cell.COND){
+                    headNeigh=0;
+                    if (i - 1 >= 0)
+                        if (board[i - 1][j].getStatus() == Cell.HEAD) //top neighbour cell
+                            headNeigh++;
+
+                    if ((j + 1 < colNum) && (i - 1 >= 0))
+                        if (board[i - 1][j + 1].getStatus() == Cell.HEAD) //right top neighbour cell
+                            headNeigh++;
+
+                    if (j + 1 < colNum)
+                        if (board[i][j + 1].getStatus() == Cell.HEAD) //right neighbour cell
+                            headNeigh++;
+
+                    if ((j + 1< colNum) && (i + 1 < rowNum))
+                        if (board[i + 1][j + 1].getStatus() == Cell.HEAD) //right bottom neighbour cell
+                            headNeigh++;
+
+                    if (i + 1 < rowNum)
+                        if (board[i + 1][j].getStatus() == Cell.HEAD) //bottom neighbour cell
+                            headNeigh++;
+
+                    if ((j - 1 >= 0) && (i + 1 < rowNum))
+                        if (board[i + 1][j - 1].getStatus() == Cell.HEAD) //left bottom neighbour cell
+                            headNeigh++;
+
+                    if (j - 1 >= 0)
+                        if (board[i][j - 1].getStatus() == Cell.HEAD) //left neighbour cell
+                            headNeigh++;
+
+                    if ((j - 1 >= 0) && (i - 1 >= 0))
+                        if (board[i - 1][j - 1].getStatus() == Cell.HEAD) //left top neighbour cell
+                            headNeigh++;
+
+                    if (headNeigh == 1 || headNeigh == 2 )
+                        next[i][j].setStatus(Cell.HEAD);
+>>>>>>> GUI
                 }
 
             }
@@ -88,11 +148,15 @@ public class Matrix {
         this.board = next;
         return 0;
     }
+<<<<<<< HEAD
 }
 
 
 
 
+=======
+    }
+>>>>>>> GUI
 
 
 
