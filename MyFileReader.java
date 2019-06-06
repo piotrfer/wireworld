@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class MyFileReader<NumberFormatExcepion> {
 
-    public static Matrix readFile(String path) throws IOException, NumberFormatException {
+    public static Matrix readFile(String path) throws Exception {
 
         FileReader fr = new FileReader(path);
         BufferedReader br = new BufferedReader(fr);
@@ -29,12 +29,11 @@ public class MyFileReader<NumberFormatExcepion> {
         Cell [][] board = new Cell [rowNum][colNum];
         for(int i = 0; i < rowNum; i++){
             for(int j = 0; j < colNum; j++){
-                try{
-                    board[i][j] = new Cell( matrix[i][j] );
+                if( matrix[i][j] >= 0 && matrix[i][j] <=3 ) {
+                    board[i][j] = new Cell(matrix[i][j]);
                 }
-                catch(Exception e){
-                    System.err.println("Number must be in range <0,3>");
-                }
+                else
+                    throw new Exception("Number must be in rande <0,3>");
             }
         }
 

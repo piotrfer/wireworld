@@ -26,5 +26,13 @@ public class Controller {
         m.simulateGeneration();
         myGrid.convertFromMatrix(m);
     }
+
+    public void openFile() {
+        System.out.println("Ok, tu się plik otworzy jak coś");
+    }
+
+    public void saveFile() {
+        System.out.println("Ok, tu będę zapisywał plik jak już ogarnę");
+    }
 }
 

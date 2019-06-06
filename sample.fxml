@@ -59,11 +59,11 @@
          <font>
             <Font size="37.0" />
          </font></Button>
-      <TabPane layoutX="698.0" layoutY="50.0" prefHeight="400.0" prefWidth="288.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane layoutX="698.0" layoutY="50.0" prefHeight="368.0" prefWidth="288.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Settings">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="330.0" prefWidth="288.0" />
             </content>
           </Tab>
           <Tab text="Modules">
@@ -73,5 +73,7 @@
           </Tab>
         </tabs>
       </TabPane>
+      <Button layoutX="698.0" layoutY="430.0" mnemonicParsing="false" onAction="#openFile" prefHeight="25.0" prefWidth="136.0" text="Open file" />
+      <Button layoutX="850.0" layoutY="430.0" mnemonicParsing="false" onAction="#saveFile" prefHeight="25.0" prefWidth="136.0" text="Save As" />
    </children>
 </Pane>
