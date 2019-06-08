@@ -57,10 +57,8 @@ public class Controller {
     public void addKite(ActionEvent actionEvent) {
         int rowValue = (Integer) kiteRowSpinner.getValue();
         int colValue = (Integer) kiteColumnSpinner.getValue();
-        //System.out.println(" " + rowValue+ "   " + colValue);
         Matrix m = myGrid.convertToMatrix();
         m.changeMatrix(ModulesCreator.getKite(),colValue,rowValue);
-        m.printToConsole();
         myGrid.convertFromMatrix(m);
 
     }
