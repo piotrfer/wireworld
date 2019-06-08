@@ -19,6 +19,9 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
+        CustomPrintStream printStream = new CustomPrintStream();
+        System.setOut(printStream);
+
         launch(args);
     }
 }
