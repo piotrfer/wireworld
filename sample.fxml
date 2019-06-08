@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -69,10 +72,20 @@
             <content>
               <AnchorPane fx:id="continuousbtn" minHeight="0.0" minWidth="0.0" prefHeight="330.0" prefWidth="288.0">
                      <children>
-                        <Button fx:id="openbtn" layoutX="14.0" layoutY="298.0" mnemonicParsing="false" onAction="#openbtnAction" prefHeight="26.0" prefWidth="129.0" text="Open file" />
-                        <Button fx:id="savebtn" layoutX="160.0" layoutY="298.0" mnemonicParsing="false" onAction="#savebtnAction" prefHeight="26.0" prefWidth="120.0" text="Save As" />
+                        <Button fx:id="openbtn" layoutX="13.0" layoutY="285.0" mnemonicParsing="false" onAction="#openbtnAction" prefHeight="26.0" prefWidth="129.0" text="Open file" />
+                        <Button fx:id="savebtn" layoutX="160.0" layoutY="285.0" mnemonicParsing="false" onAction="#savebtnAction" prefHeight="26.0" prefWidth="120.0" text="Save As" />
                         <ToggleButton fx:id="nonstopbtn" layoutX="13.0" layoutY="22.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="130.0" text="NonStop" />
                         <ToggleButton fx:id="stepsbtn" layoutX="159.0" layoutY="22.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="122.0" text="Steps" />
+                        <RadioButton layoutX="121.0" layoutY="64.0" mnemonicParsing="false" text="100 ms">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="timeIntervalButton" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton layoutX="121.0" layoutY="96.0" mnemonicParsing="false" text="200 ms" toggleGroup="$timeIntervalButton" />
+                        <RadioButton layoutX="121.0" layoutY="127.0" mnemonicParsing="false" text="500 ms" toggleGroup="$timeIntervalButton" />
+                        <RadioButton layoutX="121.0" layoutY="160.0" mnemonicParsing="false" text="1 s" toggleGroup="$timeIntervalButton" />
+                        <RadioButton layoutX="121.0" layoutY="188.0" mnemonicParsing="false" text="2 s" toggleGroup="$timeIntervalButton" />
+                        <ChoiceBox layoutX="101.0" layoutY="234.0" prefHeight="26.0" prefWidth="100.0" />
                      </children></AnchorPane>
             </content>
           </Tab>

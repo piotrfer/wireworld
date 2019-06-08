@@ -17,7 +17,6 @@ public class MyFileReader<NumberFormatExcepion> {
 
         for(int i = 0; (line = br.readLine()) != null; i++){
             matrix = addMatrix(matrix, line.length());
-            System.out.println(line);
             for(int j = 0; j < line.length(); j++){
                 matrix[i][j] = Character.getNumericValue(line.charAt(j));
             }

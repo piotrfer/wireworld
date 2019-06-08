@@ -38,12 +38,13 @@ public class Controller {
     @FXML
     private Button stopButton = new Button();
 
-    Config config = new Config();
+    private Config config = new Config();
+    //private MyTreadExtension simulateThread = new MyTreadExtension(myGrid, config);
+    //private Thread simulationThread = new Thread(simulateThread);
 
     @FXML
     protected void initialize() {
         //zrobic oddzielna funkcje w gridpane dodajaca te buttony
-
         nonstopbtn.setToggleGroup(modeToggle);
         nonstopbtn.setSelected(true);
         stepsbtn.setToggleGroup(modeToggle);
@@ -54,17 +55,14 @@ public class Controller {
         }
     }
 
-    Thread thread = new Thread(new Runnable() {
-        @Override
-        public void run() {
-                final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-                executorService.scheduleAtFixedRate(() -> {
-                    Matrix m = myGrid.convertToMatrix();
-                    m.simulateGeneration();
-                    myGrid.convertFromMatrix(m);
-                }, 0, config.getTimeInterval(), TimeUnit.MILLISECONDS);
-        }
-    });
+    /*Thread simulationThread = new Thread(() -> {
+            final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+            executorService.scheduleAtFixedRate(() -> {
+                Matrix m = myGrid.convertToMatrix();
+                m.simulateGeneration();
+                myGrid.convertFromMatrix(m);
+            }, 0, config.getTimeInterval(), TimeUnit.MILLISECONDS);
+    }); */
 
     private void checkConfig(){
         if(nonstopbtn.isSelected()){
@@ -78,12 +76,8 @@ public class Controller {
 
     public void onActionStop(ActionEvent actionEvent){
 
-        try {
-            thread.wait();
-        }
-        catch(InterruptedException e){
-            System.err.println("Interrupted exception");
-        }
+        config.setNonStop(false);
+
         config.setNonStop(false);
         startButton.setDisable(false);
         startButton.setVisible(true);
@@ -96,12 +90,15 @@ public class Controller {
 
         checkConfig();
         if( config.getNonStop() ){
+
+            //simulationThread.start();
+
             startButton.setDisable(true);
             startButton.setVisible(false);
             stopButton.setDisable(false);
             stopButton.setVisible(true);
 
-            thread.start();
+            //simulationThread.start();
 
 
         }
@@ -153,3 +150,22 @@ public class Controller {
 
 }
 
+/*class MyTreadExtension extends Thread {
+
+    private Config config;
+    public MyGridPane myGrid;
+
+    public MyTreadExtension(MyGridPane myGrid, Config config) {
+        this.myGrid = myGrid;
+        this.config = config;
+    }
+
+    @Override
+    public void run(){
+        for(int i = 0; i < 5; i++){
+            Matrix m = myGrid.convertToMatrix();
+            m.simulateGeneration();
+            myGrid.convertFromMatrix(m);
+        }
+    }
+}*/
