@@ -16,6 +16,18 @@ public class MyGridPane {
     private int rowNum = DEFAULT_ROW_NUM ;
     private ArrayList<MyButton> buttonsList = new ArrayList<>(); //lista przyciskow jednowymiarowa, trzeba pamietac o zamianie wspolrzednych
 
+    public int getColNum() {
+        return colNum;
+    }
+
+    public int getRowNum() {
+        return rowNum;
+    }
+
+    public void setRowNum(int rowNum) {
+        this.rowNum = rowNum;
+    }
+
     public ArrayList<MyButton> getButtonsList() {
         return buttonsList;
     }

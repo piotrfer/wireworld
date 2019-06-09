@@ -8,11 +8,29 @@ public class Matrix {
         this.colNum = colNum;
         this.rowNum = rowNum;
     }
+    //metoda ktora dodaje modul
+    public void changeMatrix(Matrix module, int colInsertNum, int rowInsertNum){
+        if((colInsertNum + module.getColNum() - 1) < this.colNum && (rowInsertNum + module.getRowNum() - 1) < this.rowNum){
+            for(int i = rowInsertNum; i<rowInsertNum+ module.getRowNum();i++)
+                for(int j=colInsertNum; j< colInsertNum + module.getColNum(); j++)
+                    this.board[i][j] = module.getBoardElement(i-rowInsertNum,j-colInsertNum);
+        }
+        else
+        {
+            System.out.println("Error changing matrix");
+        }
+    }
 
     public int getColNum() {
         return colNum;
     }
-
+    public void printToConsole(){
+        for(int i=0;i<rowNum;i++) {
+            for (int j = 0; j < colNum; j++)
+                System.out.print(" " + board[i][j].getStatus());
+            System.out.println("");
+        }
+    }
     public int getRowNum() {
         return rowNum; }
 

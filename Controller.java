@@ -4,6 +4,8 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Spinner;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.TextFlow;
@@ -24,6 +26,21 @@ public class Controller {
     @FXML
     private MyGridPane myGrid = new MyGridPane();
     @FXML
+    private Spinner kiteRowSpinner;
+    @FXML
+    private Spinner kiteColumnSpinner;
+    @FXML
+    private Spinner flowerRowSpinner;
+    @FXML
+    private Spinner flowerColumnSpinner;
+    @FXML
+    private Spinner heartRowSpinner;
+    @FXML
+    private Spinner heartColumnSpinner;
+
+
+
+    @FXML
     private Button openbtn = new Button();
     @FXML
     private Button savebtn = new Button();
@@ -34,35 +51,65 @@ public class Controller {
     @FXML
     private ToggleButton stepsbtn = new ToggleButton();
     @FXML
-    private ToggleGroup modeToggle = new ToggleGroup();
-    @FXML
     private Button stopButton = new Button();
+    @FXML
+    private RadioButton firstintervalbtn = new RadioButton();
+    @FXML
+    private RadioButton secondintervalbtn = new RadioButton();
+    @FXML
+    private RadioButton thirdintervalbtn = new RadioButton();
+    @FXML
+    private RadioButton fourthintervalbtn = new RadioButton();
+    @FXML
+    private RadioButton firstnumberbtn = new RadioButton();
+    @FXML
+    private RadioButton secondnumberbtn = new RadioButton();
+    @FXML
+    private RadioButton thirdnumberbtn = new RadioButton();
+    @FXML
+    private RadioButton fourthnumberbtn = new RadioButton();
 
     private Config config = new Config();
-    //private MyTreadExtension simulateThread = new MyTreadExtension(myGrid, config);
-    //private Thread simulationThread = new Thread(simulateThread);
+    private ToggleGroup modeToggle = new ToggleGroup();
+    private ToggleGroup intervalToggle = new ToggleGroup();
+    private ToggleGroup numberToggle = new ToggleGroup();
 
     @FXML
     protected void initialize() {
-        //zrobic oddzielna funkcje w gridpane dodajaca te buttony
         nonstopbtn.setToggleGroup(modeToggle);
         nonstopbtn.setSelected(true);
         stepsbtn.setToggleGroup(modeToggle);
+        firstintervalbtn.setToggleGroup(intervalToggle);
+        secondintervalbtn.setToggleGroup(intervalToggle);
+        thirdintervalbtn.setToggleGroup(intervalToggle);
+        fourthintervalbtn.setToggleGroup(intervalToggle);
+        thirdintervalbtn.setSelected(true);
+
+        firstnumberbtn.setToggleGroup(numberToggle);
+        secondnumberbtn.setToggleGroup(numberToggle);
+        thirdnumberbtn.setToggleGroup(numberToggle);
+        fourthnumberbtn.setToggleGroup(numberToggle);
+        firstnumberbtn.setSelected(true);
+
+
         for(int i=0; i< MyGridPane.DEFAULT_ROW_NUM; i++){
             for(int j=0;j<MyGridPane.DEFAULT_COL_NUM;j++){
                 myGrid.addMyButton(new MyButton(i, j, grid));
             }
         }
+        MySpinner.initializeSpinners(myGrid,heartColumnSpinner, heartRowSpinner,flowerColumnSpinner, flowerRowSpinner, kiteColumnSpinner, kiteRowSpinner);
+        ModulesCreator.initializeModules();
     }
 
     /*Thread simulationThread = new Thread(() -> {
             final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+            while(config.getNonStop()){
             executorService.scheduleAtFixedRate(() -> {
                 Matrix m = myGrid.convertToMatrix();
                 m.simulateGeneration();
                 myGrid.convertFromMatrix(m);
             }, 0, config.getTimeInterval(), TimeUnit.MILLISECONDS);
-    }); */
+    }}); */
 
     private void checkConfig(){
         if(nonstopbtn.isSelected()){
@@ -71,14 +118,63 @@ public class Controller {
         else{
             config.setNonStop(false);
         }
+        if(firstintervalbtn.isSelected()){
+            try {
+                config.setTimeInterval(100);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else if( secondintervalbtn.isSelected()){
+            try {
+                config.setTimeInterval(200);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else if( thirdintervalbtn.isSelected()){
+            try {
+                config.setTimeInterval(500);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else{
+            try {
+                config.setTimeInterval(1000);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
+        if( firstnumberbtn.isSelected()){
+            try {
+                config.setN(1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else if( secondnumberbtn.isSelected()){
+            try {
+                config.setN(5);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else if( thirdnumberbtn.isSelected()){
+            try {
+                config.setN(10);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else{
+            try {
+                config.setN(100);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void onActionStop(ActionEvent actionEvent){
 
         config.setNonStop(false);
 
-        config.setNonStop(false);
         startButton.setDisable(false);
         startButton.setVisible(true);
         stopButton.setDisable(true);
@@ -91,7 +187,10 @@ public class Controller {
         checkConfig();
         if( config.getNonStop() ){
 
-            //simulationThread.start();
+            MyTreadNonStopExtension mtnse = new MyTreadNonStopExtension(myGrid, config);
+            Thread nonStopSimulationThread = new Thread( mtnse );
+
+            nonStopSimulationThread.start();
 
             startButton.setDisable(true);
             startButton.setVisible(false);
@@ -103,9 +202,20 @@ public class Controller {
 
         }
         else{
-            Matrix m = myGrid.convertToMatrix();
-            m.simulateGeneration();
-            myGrid.convertFromMatrix(m);
+            System.err.println(config.getN());
+            System.err.println(config.getTimeInterval());
+
+            MyTreadExtension simulateThread = new MyTreadExtension(myGrid, config);
+            Thread simulationThread = new Thread(simulateThread);
+
+            if(simulationThread.isInterrupted()) {
+                try {
+                    simulationThread.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            simulationThread.start();
         }
     }
 
@@ -117,7 +227,7 @@ public class Controller {
         if(selectedFile != null){
             try {
                 myGrid.convertFromMatrix(MyFileReader.readFile(selectedFile.getAbsolutePath()));
-
+                System.out.println("File " + selectedFile.getName() + " loaded successfully.");
             }
             catch(Exception e){
                 System.err.println("File error " + e.getLocalizedMessage() + ".");
@@ -148,9 +258,37 @@ public class Controller {
         }
     }
 
+    public void addKite(ActionEvent actionEvent) {
+        int rowValue = (Integer) kiteRowSpinner.getValue();
+        int colValue = (Integer) kiteColumnSpinner.getValue();
+        Matrix m = myGrid.convertToMatrix();
+        m.changeMatrix(ModulesCreator.getKite(),colValue,rowValue);
+        myGrid.convertFromMatrix(m);
+
+    }
+
+    public void addFlower(ActionEvent actionEvent) {
+        int rowValue = (Integer) flowerRowSpinner.getValue();
+        int colValue = (Integer) flowerColumnSpinner.getValue();
+        //System.out.println(" " + rowValue+ "   " + colValue);
+        Matrix m = myGrid.convertToMatrix();
+        m.changeMatrix(ModulesCreator.getFlower(),colValue,rowValue);
+        myGrid.convertFromMatrix(m);
+
+    }
+
+    public void addHeart(ActionEvent actionEvent) {
+        int rowValue = (Integer) heartRowSpinner.getValue();
+        int colValue = (Integer) heartColumnSpinner.getValue();
+        //System.out.println(" " + rowValue+ "   " + colValue);
+        Matrix m = myGrid.convertToMatrix();
+        m.changeMatrix(ModulesCreator.getHeart(),colValue,rowValue);
+        myGrid.convertFromMatrix(m);
+
+    }
 }
 
-/*class MyTreadExtension extends Thread {
+class MyTreadExtension extends Thread {
 
     private Config config;
     public MyGridPane myGrid;
@@ -162,10 +300,40 @@ public class Controller {
 
     @Override
     public void run(){
-        for(int i = 0; i < 5; i++){
+        for(int i = 0; i < config.getN(); i++){
+            try {
+                TimeUnit.MILLISECONDS.sleep(config.getTimeInterval());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             Matrix m = myGrid.convertToMatrix();
             m.simulateGeneration();
             myGrid.convertFromMatrix(m);
         }
     }
-}*/
+}
+
+class MyTreadNonStopExtension extends Thread {
+
+    private Config config;
+    public MyGridPane myGrid;
+
+    public MyTreadNonStopExtension(MyGridPane myGrid, Config config) {
+        this.myGrid = myGrid;
+        this.config = config;
+    }
+
+    @Override
+    public void run(){
+        while(config.getNonStop()){
+            try {
+                TimeUnit.MILLISECONDS.sleep(config.getTimeInterval());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Matrix m = myGrid.convertToMatrix();
+            m.simulateGeneration();
+            myGrid.convertFromMatrix(m);
+        }
+    }
+}

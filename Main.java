@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
+
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         primaryStage.setTitle("Wireworld");
         primaryStage.setScene(new Scene(root, 1000, 600));
@@ -21,6 +22,10 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
+        CustomPrintStream printStream = new CustomPrintStream();
+        System.setOut(printStream);
+        System.setErr(printStream);
+
         launch(args);
     }
 }
