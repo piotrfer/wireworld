@@ -3,14 +3,12 @@ public class Config{
     private int n;
     private String fileIn;
     private String fileOut;
-    boolean nonStop;
 
     {
-        timeInterval = 500;
+        timeInterval = 100;
         n = 10;
         fileIn = null;
         fileOut = "prefix";
-        nonStop = true;
     }
 
     public void setTimeInterval( int timeInterval ) throws Exception{
@@ -47,13 +45,5 @@ public class Config{
 
     public String getFileOut(){
         return fileOut;
-    }
-
-    public void setNonStop( boolean nonStop ){
-        this.nonStop = nonStop;
-    }
-
-    public boolean getNonStop(){
-        return nonStop;
     }
 }

@@ -1,12 +1,10 @@
 
-import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
-import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import java.io.File;
@@ -17,9 +15,6 @@ import java.util.concurrent.TimeUnit;
 public class Controller {
     @FXML
     private GridPane grid;
-    @FXML
-    private Button startButton = new Button();
-    @FXML
     private MyGridPane myGrid = new MyGridPane();
     @FXML
     private Spinner kiteRowSpinner;
@@ -246,24 +241,8 @@ public class Controller {
         }
     }
 
-    public void savebtnAction(ActionEvent actionEvent) {
-        FileChooser sfc = new FileChooser();
-        sfc.setInitialFileName("SaveGeneration");
-        sfc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text doc(*.txt)", "*.txt"));
-        File savedFile = sfc.showSaveDialog(null);
-
-        if(savedFile != null) {
-            try {
-                MyFileWriter.writeFile(savedFile.getAbsolutePath(), myGrid.convertToMatrix());
-                System.out.println("File was saved successfully.");
-            }
-            catch(IOException e){
-                System.err.println("File error.");
-            }
-        }
-        else{
-            System.out.println("File error.");
-        }
+    public void saveFile() {
+        System.out.println("Ok, tu będę zapisywał plik jak już ogarnę");
     }
 
     public void addKite(ActionEvent actionEvent) {

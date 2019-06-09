@@ -5,10 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-
 
 public class Main extends Application {
     @Override
@@ -26,4 +24,3 @@ public class Main extends Application {
         launch(args);
     }
 }
-

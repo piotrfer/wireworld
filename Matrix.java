@@ -3,6 +3,11 @@ public class Matrix {
     private int colNum;
     private int rowNum;
 
+    public Matrix() {
+        colNum=0;
+        rowNum=0;
+    }
+
     public Matrix(Cell[][] board, int colNum, int rowNum) {
         this.board = board;
         this.colNum = colNum;
