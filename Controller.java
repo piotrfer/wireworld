@@ -8,14 +8,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
-import org.w3c.dom.Text;
-
 import java.io.File;
 import java.io.IOException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
+import java.io.PrintStream;
 import java.util.concurrent.TimeUnit;
 
 public class Controller {
@@ -37,15 +33,8 @@ public class Controller {
     private Spinner heartRowSpinner;
     @FXML
     private Spinner heartColumnSpinner;
-
-
-
     @FXML
-    private Button openbtn = new Button();
-    @FXML
-    private Button savebtn = new Button();
-    @FXML
-    private TextFlow messagebox = new TextFlow();
+    private TextArea messagebox = new TextArea();
     @FXML
     private ToggleButton nonstopbtn = new ToggleButton();
     @FXML
@@ -74,23 +63,16 @@ public class Controller {
     private ToggleGroup intervalToggle = new ToggleGroup();
     private ToggleGroup numberToggle = new ToggleGroup();
 
+
     @FXML
     protected void initialize() {
-        nonstopbtn.setToggleGroup(modeToggle);
-        nonstopbtn.setSelected(true);
-        stepsbtn.setToggleGroup(modeToggle);
-        firstintervalbtn.setToggleGroup(intervalToggle);
-        secondintervalbtn.setToggleGroup(intervalToggle);
-        thirdintervalbtn.setToggleGroup(intervalToggle);
-        fourthintervalbtn.setToggleGroup(intervalToggle);
-        thirdintervalbtn.setSelected(true);
 
-        firstnumberbtn.setToggleGroup(numberToggle);
-        secondnumberbtn.setToggleGroup(numberToggle);
-        thirdnumberbtn.setToggleGroup(numberToggle);
-        fourthnumberbtn.setToggleGroup(numberToggle);
-        firstnumberbtn.setSelected(true);
+        CustomConsole cs = new CustomConsole( messagebox );
+        PrintStream printStream = new PrintStream( cs, true);
+        System.setOut(printStream);
+        System.setErr(printStream);
 
+        mySetToggleGroups();
 
         for(int i=0; i< MyGridPane.DEFAULT_ROW_NUM; i++){
             for(int j=0;j<MyGridPane.DEFAULT_COL_NUM;j++){
@@ -99,17 +81,28 @@ public class Controller {
         }
         MySpinner.initializeSpinners(myGrid,heartColumnSpinner, heartRowSpinner,flowerColumnSpinner, flowerRowSpinner, kiteColumnSpinner, kiteRowSpinner);
         ModulesCreator.initializeModules();
+
+        System.out.println("Welcome to WireWorldSimulator2000!");
+        System.out.println("Press help button if you need help!");
     }
 
-    /*Thread simulationThread = new Thread(() -> {
-            final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-            while(config.getNonStop()){
-            executorService.scheduleAtFixedRate(() -> {
-                Matrix m = myGrid.convertToMatrix();
-                m.simulateGeneration();
-                myGrid.convertFromMatrix(m);
-            }, 0, config.getTimeInterval(), TimeUnit.MILLISECONDS);
-    }}); */
+
+    private void mySetToggleGroups(){
+        nonstopbtn.setToggleGroup(modeToggle);
+        nonstopbtn.setSelected(true);
+        stepsbtn.setToggleGroup(modeToggle);
+        firstintervalbtn.setToggleGroup(intervalToggle);
+        secondintervalbtn.setToggleGroup(intervalToggle);
+        thirdintervalbtn.setToggleGroup(intervalToggle);
+        fourthintervalbtn.setToggleGroup(intervalToggle);
+        thirdintervalbtn.setSelected(true);
+        firstnumberbtn.setToggleGroup(numberToggle);
+        secondnumberbtn.setToggleGroup(numberToggle);
+        thirdnumberbtn.setToggleGroup(numberToggle);
+        fourthnumberbtn.setToggleGroup(numberToggle);
+        firstnumberbtn.setSelected(true);
+        nonStopAction();
+    }
 
     private void checkConfig(){
         if(nonstopbtn.isSelected()){
@@ -180,10 +173,37 @@ public class Controller {
         stopButton.setDisable(true);
         stopButton.setVisible(false);
 
+        System.out.println("Simulation stopped.");
+    }
+
+    public void printHelp(){
+        System.out.println("Help:");
+        System.out.println("WireWorldSimulator2000 can simulate WireWorld cellular automaton proposed by Brian Silverman in 1987.");
+        System.out.println("Choose your settings in 'settings' page on the right side of the screen.");
+        System.out.println("You can choose mode of simulation - non stop simulation or step by step.");
+        System.out.println("You can also choose time interval and number of generations to simulate.");
+        System.out.println("If you want to open file or save current generation use button on the right bottom side of the screen.");
+        System.out.println("On the second tab - modules - you can add preinstalled modules to your grid.");
+        System.out.println("Thank you for choosing WireWorldSimulator2000!");
+    }
+
+    public void nonStopAction(){
+        firstnumberbtn.setDisable(true);
+        secondnumberbtn.setDisable(true);
+        thirdnumberbtn.setDisable(true);
+        fourthnumberbtn.setDisable(true);
+    }
+
+    public void stepsAction(ActionEvent actionEvent){
+        firstnumberbtn.setDisable(false);
+        secondnumberbtn.setDisable(false);
+        thirdnumberbtn.setDisable(false);
+        fourthnumberbtn.setDisable(false);
     }
 
     public void onActionStart(ActionEvent actionEvent) {
 
+        System.out.println("Simulation started.");
         checkConfig();
         if( config.getNonStop() ){
 
@@ -197,24 +217,12 @@ public class Controller {
             stopButton.setDisable(false);
             stopButton.setVisible(true);
 
-            //simulationThread.start();
-
 
         }
         else{
-            System.err.println(config.getN());
-            System.err.println(config.getTimeInterval());
-
-            MyTreadExtension simulateThread = new MyTreadExtension(myGrid, config);
+            MyTreadExtension simulateThread = new MyTreadExtension(myGrid, config, startButton);
             Thread simulationThread = new Thread(simulateThread);
 
-            if(simulationThread.isInterrupted()) {
-                try {
-                    simulationThread.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
             simulationThread.start();
         }
     }
@@ -292,14 +300,19 @@ class MyTreadExtension extends Thread {
 
     private Config config;
     public MyGridPane myGrid;
+    private Button startButton;
 
-    public MyTreadExtension(MyGridPane myGrid, Config config) {
+    public MyTreadExtension(MyGridPane myGrid, Config config, Button startButton) {
         this.myGrid = myGrid;
+        this.startButton = startButton;
         this.config = config;
     }
 
     @Override
     public void run(){
+
+        startButton.setDisable(true);
+
         for(int i = 0; i < config.getN(); i++){
             try {
                 TimeUnit.MILLISECONDS.sleep(config.getTimeInterval());
@@ -310,6 +323,7 @@ class MyTreadExtension extends Thread {
             m.simulateGeneration();
             myGrid.convertFromMatrix(m);
         }
+        startButton.setDisable(false);
     }
 }
 
@@ -317,6 +331,7 @@ class MyTreadNonStopExtension extends Thread {
 
     private Config config;
     public MyGridPane myGrid;
+    private Button startButton;
 
     public MyTreadNonStopExtension(MyGridPane myGrid, Config config) {
         this.myGrid = myGrid;
@@ -325,6 +340,7 @@ class MyTreadNonStopExtension extends Thread {
 
     @Override
     public void run(){
+
         while(config.getNonStop()){
             try {
                 TimeUnit.MILLISECONDS.sleep(config.getTimeInterval());
